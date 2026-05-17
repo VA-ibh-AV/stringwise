@@ -1,0 +1,28 @@
+services:
+  landing:
+    volumes:
+      - ./landing/dist:/usr/share/nginx/html:ro
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 80"
+    volumes:
+      - ./frontend:/app
+      - frontend_nm:/app/node_modules
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    command: go run ./cmd/server
+    volumes:
+      - ./backend:/app
+      - go_pkg:/go/pkg
+
+volumes:
+  frontend_nm:
+  go_pkg:

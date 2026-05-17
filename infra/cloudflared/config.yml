@@ -1,0 +1,14 @@
+# Cloudflare Tunnel config
+# Replace TUNNEL_ID with your tunnel ID from `cloudflared tunnel create stringwise`
+tunnel: TUNNEL_ID
+credentials-file: /etc/cloudflared/TUNNEL_ID.json
+
+ingress:
+  - hostname: string-wise.com
+    service: http://localhost:3001
+  - hostname: app.string-wise.com
+    service: http://localhost:3000
+  - hostname: api.string-wise.com
+    service: http://localhost:8080
+  # Catch-all
+  - service: http_status:404

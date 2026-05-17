@@ -1,0 +1,27 @@
+name: stringwise
+
+services:
+  landing:
+    build: ./landing
+    restart: unless-stopped
+    ports:
+      - "3001:80"
+    networks: [app]
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks: [app]
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file: .env
+    networks: [app]
+
+networks:
+  app:
