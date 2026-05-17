@@ -2,9 +2,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 
 const NAV = [
-  { id: 'dashboard', label: 'Dashboard', path: '/',         icon: IconHome },
-  { id: 'lessons',   label: 'My Lessons', path: '/lessons',  icon: IconBook },
-  { id: 'practice',  label: 'Practice',   path: '/practice', icon: IconMusic },
+  { id: 'dashboard', label: 'Dashboard', path: '/',          icon: IconHome },
+  { id: 'lessons',   label: 'My Lessons', path: '/lessons',   icon: IconBook },
+  { id: 'practice',  label: 'Practice',   path: '/practice',  icon: IconMusic },
+  { id: 'trending',  label: 'Trending',   path: '/trending',  icon: IconTrending },
 ]
 
 export default function StudentSidebar() {
@@ -22,18 +23,21 @@ export default function StudentSidebar() {
     <aside className="sidebar">
       <div className="sidebar-top">
         <div className="brand">
-          <div className="brand-icon">
+          <div className="brand-mark">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <line x1="2" y1="4"  x2="14" y2="4"  stroke="currentColor" strokeWidth="1"   />
-              <line x1="2" y1="7"  x2="14" y2="7"  stroke="currentColor" strokeWidth="1.4" />
-              <line x1="2" y1="10" x2="14" y2="10" stroke="currentColor" strokeWidth="1.8" />
-              <line x1="2" y1="13" x2="14" y2="13" stroke="currentColor" strokeWidth="2.2" />
+              <line x1="2" y1="4"  x2="14" y2="4"  stroke="#0a0a0a" strokeWidth="1"   />
+              <line x1="2" y1="7"  x2="14" y2="7"  stroke="#0a0a0a" strokeWidth="1.4" />
+              <line x1="2" y1="10" x2="14" y2="10" stroke="#0a0a0a" strokeWidth="1.8" />
+              <line x1="2" y1="13" x2="14" y2="13" stroke="#0a0a0a" strokeWidth="2.2" />
             </svg>
           </div>
-          <span className="brand-name">StringWise</span>
+          <div className="brand-text">
+            <div className="brand-name">Stringwise</div>
+            <div className="brand-tag">Student</div>
+          </div>
         </div>
-        <nav className="sidebar-nav">
-          <div className="nav-section-label">Learning</div>
+        <nav className="nav">
+          <div className="nav-label">Learning</div>
           {NAV.map(({ id, label, path, icon: Icon }) => (
             <Link
               key={id}
@@ -91,6 +95,15 @@ function IconMusic() {
       <path d="M9 18V5l12-2v13" />
       <circle cx="6" cy="18" r="3" />
       <circle cx="18" cy="16" r="3" />
+    </svg>
+  )
+}
+
+function IconTrending() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
     </svg>
   )
 }

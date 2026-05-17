@@ -13,6 +13,8 @@ import StudentsPage from './pages/StudentsPage'
 import LessonsPage from './pages/LessonsPage'
 import LoginPage from './LoginPage'
 import StudentApp from './StudentApp'
+import TrendingPage from './pages/TrendingPage'
+import SongViewer from './pages/student/SongViewer'
 import { useAuth } from './AuthContext'
 import { api } from './api'
 
@@ -214,7 +216,11 @@ export default function App() {
       </div>
     )
   }
-  if (!session) return <LoginPage />
+  if (!session) {
+    if (location.pathname.startsWith('/trending')) return <TrendingPage standalone={true} />
+    if (location.pathname.startsWith('/songs/')) return <SongViewer standalone={true} />
+    return <LoginPage />
+  }
   if (role === 'student') return <StudentApp />
 
   const commonProps = {

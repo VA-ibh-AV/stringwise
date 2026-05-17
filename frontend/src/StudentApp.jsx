@@ -11,6 +11,8 @@ import StudentLessons from './pages/student/StudentLessons'
 import StudentLessonViewer from './pages/student/StudentLessonViewer'
 import StudentPractice from './pages/student/StudentPractice'
 import StudentSongEditor from './pages/student/StudentSongEditor'
+import TrendingPage from './pages/TrendingPage'
+import SongViewer from './pages/student/SongViewer'
 
 const TWEAK_DEFAULTS = { accent: '#E8A020', theme: 'dark', density: 'comfortable' }
 
@@ -87,6 +89,8 @@ export default function StudentApp() {
             <Route path="/lessons/:id" element={<StudentLessonViewer />} />
             <Route path="/practice" element={<StudentPractice {...commonProps} />} />
             <Route path="/practice/:id" element={<StudentSongEditor setPracticeSongs={setPracticeSongs} />} />
+            <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/songs/:id" element={<SongViewer />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

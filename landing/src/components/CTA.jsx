@@ -22,15 +22,17 @@ export default function CTA() {
       <div className="cta-inner reveal">
         <h2 className="cta-h2">Ready to teach <em>smarter?</em></h2>
         <p className="cta-sub">Free to use. No credit card. Sign in with Google and start in minutes.</p>
-        <a href="https://app.string-wise.com" className="btn-primary-lg">
-          Open Studio Free
-          <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
-            <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </a>
-        <a href="https://app.string-wise.com" className="btn-ghost-lg" style={{ marginTop: 12, fontSize: '0.88em', opacity: 0.7 }}>
-          Student? Sign in here →
-        </a>
+        <div className="cta-actions">
+          <a href="https://app.string-wise.com" className="btn-primary-lg">
+            Open Studio Free
+            <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </a>
+          <a href="https://app.string-wise.com" className="cta-student-link">
+            Student? Sign in here →
+          </a>
+        </div>
       </div>
     </div>
   )

@@ -152,6 +152,22 @@ type UpdatePracticeSongReq struct {
 	Visibility string          `json:"visibility" binding:"oneof=public private"`
 }
 
+type TrendingSong struct {
+	ID            uuid.UUID `json:"id"`
+	Title         string    `json:"title"`
+	StudentUserID uuid.UUID `json:"student_user_id"`
+	AuthorName    string    `json:"author_name"`
+	SectionsCount int       `json:"sections_count"`
+	LikeCount     int       `json:"like_count"`
+	DislikeCount  int       `json:"dislike_count"`
+	MyReaction    *string   `json:"my_reaction"`
+	CreatedAt     time.Time `json:"created_at"`
+}
+
+type ReactReq struct {
+	Reaction *string `json:"reaction"`
+}
+
 type CreateLessonReq struct {
 	BatchID    string  `json:"batch_id" binding:"required,uuid"`
 	Title      string  `json:"title" binding:"required"`

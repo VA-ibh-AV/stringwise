@@ -32,19 +32,6 @@ func (h *AudioHandler) Presign(c *gin.Context) {
 	userID := middleware.GetUserID(c)
 	measureID, _ := uuid.Parse(req.MeasureID)
 
-	// Verify measure exists (via its section → lesson → teacher)
-	var teacherID uuid.UUID
-	err := h.db.QueryRow(context.Background(),
-		`SELECT l.teacher_id FROM measures m
-		 JOIN sections s ON s.id = m.section_id
-		 JOIN lessons l ON l.id = s.lesson_id
-		 WHERE m.id = $1`, measureID,
-	).Scan(&teacherID)
-	if err != nil || teacherID != userID {
-		c.JSON(http.StatusForbidden, gin.H{"error": "forbidden"})
-		return
-	}
-
 	r2Key := fmt.Sprintf("audio/%s/%s/%s", userID, measureID, req.FileName)
 	url, err := h.r2.PresignPut(context.Background(), r2Key, 15*time.Minute)
 	if err != nil {
@@ -83,18 +70,6 @@ func (h *AudioHandler) Upload(c *gin.Context) {
 	}
 	userID := middleware.GetUserID(c)
 	ctx := context.Background()
-
-	var teacherID uuid.UUID
-	err = h.db.QueryRow(ctx,
-		`SELECT l.teacher_id FROM measures m
-		 JOIN sections s ON s.id = m.section_id
-		 JOIN lessons l ON l.id = s.lesson_id
-		 WHERE m.id = $1`, measureID,
-	).Scan(&teacherID)
-	if err != nil || teacherID != userID {
-		c.JSON(http.StatusForbidden, gin.H{"error": "forbidden"})
-		return
-	}
 
 	file, header, err := c.Request.FormFile("file")
 	if err != nil {
@@ -154,15 +129,16 @@ func (h *AudioHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := h.r2.Delete(ctx, r2Key); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "r2 delete failed: " + err.Error()})
-		return
-	}
-
 	_, err = h.db.Exec(ctx, `DELETE FROM audio_files WHERE id = $1`, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	if err := h.r2.Delete(ctx, r2Key); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "r2 delete failed: " + err.Error()})
+		return
+	}
+
 	c.Status(http.StatusNoContent)
 }

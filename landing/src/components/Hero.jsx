@@ -26,7 +26,7 @@ export default function Hero() {
           <span className="line"><span><em>Beautifully.</em></span></span>
         </h1>
         <p className="hero-sub">
-          A focused studio for guitar teachers. Write tabs, plan lessons, track students — all in one distraction-free tool built around how you actually teach.
+          A focused studio for guitar teachers. Write tabs, plan lessons, track students — built around how you actually teach. Students get their own practice space to play along, take notes, and share songs.
         </p>
         <div className="hero-actions">
           <a href="https://app.string-wise.com" className="btn-primary">

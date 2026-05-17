@@ -286,6 +286,12 @@ export function Section({ section, index, total, onChange, onRemove, onMove, onD
       delete next[mid]
       return next
     })
+    patch({ measures: section.measures.map(m => {
+      if (m.id !== mid) return m
+      const { audio_file, ...rest } = m
+      return rest
+    })})
+    onDirty?.()
   }
 
   function toggleMeasureLoop(mi) {
@@ -469,6 +475,10 @@ export function Section({ section, index, total, onChange, onRemove, onMove, onD
                   measureId={m.id}
                   setMeasureAudio={setMeasureAudio}
                   onRemove={() => removeAudio(m.id)}
+                  onUploaded={(mid, audioData) => {
+                    patch({ measures: section.measures.map(me => me.id === mid ? { ...me, audio_file: audioData } : me) })
+                    onDirty?.()
+                  }}
                   readOnly={readOnly}
                 />
               </div>
@@ -534,7 +544,7 @@ export function Section({ section, index, total, onChange, onRemove, onMove, onD
   )
 }
 
-function MeasureAudio({ audio, measureId, setMeasureAudio, onRemove, readOnly = false }) {
+function MeasureAudio({ audio, measureId, setMeasureAudio, onRemove, onUploaded, readOnly = false }) {
   const [mode, setMode] = useState('idle') // idle | menu | recording | preview | uploading
   const [recSeconds, setRecSeconds] = useState(0)
   const [uploadErr, setUploadErr] = useState('')
@@ -562,6 +572,7 @@ function MeasureAudio({ audio, measureId, setMeasureAudio, onRemove, readOnly = 
     try {
       const result = await api.uploadAudio(mid, blob, name)
       setMeasureAudio(prev => ({ ...prev, [mid]: { src: result.public_url, name, audioFileId: result.audio_file_id } }))
+      onUploaded?.(mid, { id: result.audio_file_id, url: result.public_url, name })
       URL.revokeObjectURL(blobURL)
     } catch (err) {
       setUploadErr('Upload failed — audio works this session only')

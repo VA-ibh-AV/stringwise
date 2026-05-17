@@ -646,38 +646,82 @@ nav.scrolled {
   0%, 100% { transform: scaleY(0.4); }
   50%      { transform: scaleY(1);   }
 }
-.piano {
-  display: flex;
-  position: relative;
-  height: 100%;
+.mf-vis {
   width: 100%;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
 }
-.piano .white {
-  flex: 1;
-  background: linear-gradient(180deg, #f5efe3 0%, #d8cfb8 100%);
-  border-right: 1px solid #0a0a0a;
+.mf-header, .mf-footer {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.mf-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+.mf-pill--section {
+  background: rgba(240,168,48,0.18);
+  color: var(--accent2);
+  border: 1px solid rgba(240,168,48,0.35);
+}
+.mf-pill--bpm {
+  background: rgba(77,208,196,0.1);
+  color: var(--teal);
+  border: 1px solid rgba(77,208,196,0.25);
+}
+.mf-pill--loop {
+  background: rgba(255,255,255,0.05);
+  color: var(--t2);
+  border: 1px solid var(--border2);
+}
+.mf-pill--dim {
+  background: transparent;
+  color: var(--t3);
+  border: 1px solid var(--border);
+  opacity: 0.6;
+}
+.mf-strings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 0;
+}
+.mf-string {
   position: relative;
-  transition: background 0.15s;
+  height: 14px;
+  display: flex;
+  align-items: center;
 }
-.piano .white:last-child { border-right: none; }
-.piano .white:hover {
-  background: linear-gradient(180deg, var(--accent2) 0%, var(--accent3) 100%);
+.mf-line {
+  width: 100%;
+  background: rgba(245,230,200,0.2);
+  border-radius: 2px;
 }
-.piano .black {
+.mf-note {
   position: absolute;
-  top: 0;
-  width: 11%;
-  height: 60%;
-  background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-  border-radius: 0 0 3px 3px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 -2px 0 rgba(255,255,255,0.05);
-  z-index: 2;
-  transition: background 0.15s;
+  transform: translateX(-50%);
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(240,168,48,0.15);
+  border: 1px solid rgba(240,168,48,0.4);
+  border-radius: 3px;
+  width: 16px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
-.piano .black:hover { background: var(--accent3); }
 
 /* FEATURES */
 .features-grid {
@@ -889,7 +933,20 @@ nav.scrolled {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.cta-sub { font-size: 18px; color: var(--t2); margin-bottom: 48px; }
+.cta-sub { font-size: 18px; color: var(--t2); margin-bottom: 40px; }
+.cta-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.cta-student-link {
+  font-size: 14px;
+  color: var(--t3);
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.cta-student-link:hover { color: var(--t1); }
 .btn-primary-lg {
   display: inline-flex;
   align-items: center;
@@ -1013,4 +1070,100 @@ footer {
   footer { padding: 32px 24px; flex-direction: column; text-align: center; gap: 20px; }
   .marquee-item { font-size: 13px; gap: 32px; }
   .marquee-track { gap: 32px; }
+}
+
+/* ── Trending section ──────────────────────────────────────── */
+.trending-section { padding: 100px 0; background: var(--bg); }
+.trending-inner { max-width: 800px; margin: 0 auto; padding: 0 40px; }
+.trending-head { text-align: center; margin-bottom: 48px; }
+.trending-cta { text-align: center; margin-top: 28px; }
+
+/* ── Landing tracklist rows ────────────────────────────────── */
+.lc-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.lc-row {
+  display: grid;
+  grid-template-columns: 28px 28px 32px 1fr auto auto 50px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.lc-row:last-child { border-bottom: none; }
+.lc-row:hover { background: var(--surface2); }
+.lc-row--skel {
+  height: 56px;
+  animation: tc-pulse 1.4s ease-in-out infinite;
+}
+@keyframes tc-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.lc-idx { font-size: 12px; color: var(--t3); text-align: right; font-variant-numeric: tabular-nums; }
+.lc-play {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--t2);
+  transition: background 0.15s, color 0.15s;
+}
+.lc-row:hover .lc-play { background: var(--accent); border-color: var(--accent); color: #000; }
+.lc-play--active { background: var(--accent) !important; border-color: var(--accent) !important; color: #000 !important; cursor: pointer; }
+.lc-row--playing { background: rgba(232,160,32,0.08); }
+.lc-play { cursor: pointer; }
+.lc-avatar {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+.lc-info { min-width: 0; }
+.lc-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lc-author { display: block; font-size: 11px; color: var(--t3); margin-top: 2px; }
+.lc-sections {
+  font-size: 11px;
+  color: var(--t3);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.lc-likes {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--t2);
+}
+.lc-date { font-size: 11px; color: var(--t3); text-align: right; white-space: nowrap; }
+.lc-empty { text-align: center; color: var(--t2); font-size: 14px; padding: 40px 0; }
+@media (max-width: 600px) {
+  .lc-row { grid-template-columns: 24px 26px 28px 1fr auto; gap: 8px; padding: 12px 14px; }
+  .lc-sections, .lc-date { display: none; }
+  .trending-inner { padding: 0 20px; }
 }

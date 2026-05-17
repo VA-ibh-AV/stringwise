@@ -35,10 +35,15 @@ func New(cfg *config.Config, db *pgxpool.Pool, r2 *storage.R2Client) *gin.Engine
 	r.Use(func(c *gin.Context) {
 		origin := c.GetHeader("Origin")
 		allowed := false
-		for _, o := range cfg.CORSOrigins {
-			if o == origin {
-				allowed = true
-				break
+		if cfg.Env != "production" {
+			// dev: allow any origin so local IP / tunnels work without reconfiguring
+			allowed = origin != ""
+		} else {
+			for _, o := range cfg.CORSOrigins {
+				if o == origin {
+					allowed = true
+					break
+				}
 			}
 		}
 		if allowed {
@@ -63,10 +68,12 @@ func New(cfg *config.Config, db *pgxpool.Pool, r2 *storage.R2Client) *gin.Engine
 	lh := handlers.NewLessonHandler(db, r2)
 	ah := handlers.NewAudioHandler(db, r2)
 	ph := handlers.NewPracticeHandler(db)
+	th := handlers.NewTrendingHandler(db)
 
 	authMW := middleware.Auth(db, cfg.SupabaseJWTSecret, ecKey)
 	jwtMW := middleware.ValidateJWT(cfg.SupabaseJWTSecret, ecKey)
 	teacherMW := middleware.RequireTeacher()
+	optionalAuth := middleware.OptionalAuth(cfg.SupabaseJWTSecret, ecKey)
 
 	// JWT-only: registration doesn't require an existing profile
 	noProfile := r.Group("/api/v1", jwtMW)
@@ -146,7 +153,7 @@ func New(cfg *config.Config, db *pgxpool.Pool, r2 *storage.R2Client) *gin.Engine
 			lessons.DELETE("/:id", teacherMW, lh.Delete)
 		}
 
-		audio := v1.Group("/audio", teacherMW)
+		audio := v1.Group("/audio")
 		{
 			audio.POST("/presign", ah.Presign)
 			audio.POST("/upload", ah.Upload)
@@ -162,6 +169,11 @@ func New(cfg *config.Config, db *pgxpool.Pool, r2 *storage.R2Client) *gin.Engine
 			practice.DELETE("/:id", ph.Delete)
 		}
 	}
+
+	// Public trending (optional auth for my_reaction)
+	r.GET("/api/v1/trending", optionalAuth, th.List)
+	r.GET("/api/v1/trending/:id/sections", th.GetSections)
+	r.POST("/api/v1/trending/:id/react", authMW, th.React)
 
 	return r
 }

@@ -71,17 +71,35 @@ export default function Instruments() {
           </div>
           <h3>Speaks the language of<br/><em>musicians.</em></h3>
           <p>Tempo, sections, dynamics, repeats — not just the language of project trackers. Built by a teacher, for teachers.</p>
-          <div className="vis-small" style={{ height: '100px' }}>
-            <div className="piano">
-              {Array.from({ length: 12 }, (_, i) => <div key={i} className="white"></div>)}
-              <div className="black" style={{ left: '6%' }}></div>
-              <div className="black" style={{ left: '14.5%' }}></div>
-              <div className="black" style={{ left: '31%' }}></div>
-              <div className="black" style={{ left: '39.5%' }}></div>
-              <div className="black" style={{ left: '48%' }}></div>
-              <div className="black" style={{ left: '64.5%' }}></div>
-              <div className="black" style={{ left: '73%' }}></div>
-              <div className="black" style={{ left: '89.5%' }}></div>
+          <div className="mf-vis">
+            <div className="mf-header">
+              <span className="mf-pill mf-pill--section">Verse 1</span>
+              <span className="mf-pill mf-pill--bpm">♩ 80 bpm</span>
+              <span className="mf-pill mf-pill--loop">⟳ Loop</span>
+            </div>
+            <div className="mf-strings">
+              {[
+                { w: 1,   notes: [{ p: 18 }, { p: 52 }] },
+                { w: 1.4, notes: [{ p: 35 }, { p: 68 }] },
+                { w: 1.8, notes: [{ p: 24 }] },
+                { w: 2.2, notes: [{ p: 45 }, { p: 80 }] },
+                { w: 2.7, notes: [{ p: 60 }] },
+                { w: 3.2, notes: [{ p: 15 }, { p: 72 }] },
+              ].map((s, i) => (
+                <div key={i} className="mf-string">
+                  <div className="mf-line" style={{ height: s.w + 'px' }} />
+                  {s.notes.map((n, j) => (
+                    <span key={j} className="mf-note" style={{ left: n.p + '%' }}>
+                      {[5, 7, 0, 3, 5, 2][i]}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="mf-footer">
+              <span className="mf-pill mf-pill--dim">Chorus</span>
+              <span className="mf-pill mf-pill--dim">Bridge</span>
+              <span className="mf-pill mf-pill--dim">Outro</span>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import Instruments from './components/Instruments'
 import Features from './components/Features'
 import How from './components/How'
 import Proof from './components/Proof'
+import Trending from './components/Trending'
 import CTA from './components/CTA'
 import Footer from './components/Footer'
 
@@ -64,6 +65,7 @@ export default function App() {
       <Features />
       <How />
       <Proof />
+      <Trending />
       <CTA />
       <Footer />
     </>

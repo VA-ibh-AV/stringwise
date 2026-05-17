@@ -46,6 +46,10 @@ export const api = {
   createPracticeSong: (body) => req('/practice', { method: 'POST', body: JSON.stringify(body) }),
   updatePracticeSong: (id, body) => req(`/practice/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   deletePracticeSong: (id) => req(`/practice/${id}`, { method: 'DELETE' }),
+  getTrending:        () => req('/trending'),
+  getTrendingSections:(id) => req(`/trending/${id}/sections`),
+  reactToSong:        (id, reaction) => req(`/trending/${id}/react`, { method: 'POST', body: JSON.stringify({ reaction }) }),
+
   presignAudio: (data) => req('/audio/presign', { method: 'POST', body: JSON.stringify(data) }),
   deleteAudio: (id) => req(`/audio/${id}`, { method: 'DELETE' }),
   uploadAudio: async (measureId, blob, fileName) => {

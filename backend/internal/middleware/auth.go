@@ -112,6 +112,52 @@ func parseJWT(c *gin.Context, hmacSecret []byte, ecKey *ecdsa.PublicKey) (uuid.U
 	return userID, true
 }
 
+// tryParseJWT attempts to parse the JWT without aborting the request on failure.
+func tryParseJWT(c *gin.Context, hmacSecret []byte, ecKey *ecdsa.PublicKey) (uuid.UUID, bool) {
+	header := c.GetHeader("Authorization")
+	if !strings.HasPrefix(header, "Bearer ") {
+		return uuid.UUID{}, false
+	}
+	raw := strings.TrimPrefix(header, "Bearer ")
+	tok, err := jwt.Parse(raw, func(t *jwt.Token) (any, error) {
+		switch t.Method.(type) {
+		case *jwt.SigningMethodHMAC:
+			return hmacSecret, nil
+		case *jwt.SigningMethodECDSA:
+			if ecKey == nil {
+				return nil, fmt.Errorf("ES256 key not configured")
+			}
+			return ecKey, nil
+		default:
+			return nil, fmt.Errorf("unexpected signing method: %T", t.Method)
+		}
+	})
+	if err != nil || !tok.Valid {
+		return uuid.UUID{}, false
+	}
+	claims, ok := tok.Claims.(jwt.MapClaims)
+	if !ok {
+		return uuid.UUID{}, false
+	}
+	sub, _ := claims["sub"].(string)
+	userID, err := uuid.Parse(sub)
+	if err != nil {
+		return uuid.UUID{}, false
+	}
+	return userID, true
+}
+
+// OptionalAuth tries to validate the JWT and set userID in context, but does not abort if absent or invalid.
+func OptionalAuth(hmacSecret string, ecKey *ecdsa.PublicKey) gin.HandlerFunc {
+	secret := []byte(hmacSecret)
+	return func(c *gin.Context) {
+		if userID, ok := tryParseJWT(c, secret, ecKey); ok {
+			c.Set(string(CtxUserID), userID)
+		}
+		c.Next()
+	}
+}
+
 // Auth validates JWT and requires an existing profile row.
 func Auth(db *pgxpool.Pool, hmacSecret string, ecKey *ecdsa.PublicKey) gin.HandlerFunc {
 	secret := []byte(hmacSecret)
