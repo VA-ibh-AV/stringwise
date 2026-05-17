@@ -13,6 +13,7 @@ import StudentPractice from './pages/student/StudentPractice'
 import StudentSongEditor from './pages/student/StudentSongEditor'
 import TrendingPage from './pages/TrendingPage'
 import SongViewer from './pages/student/SongViewer'
+import StudentTour from './components/StudentTour'
 
 const TWEAK_DEFAULTS = { accent: '#E8A020', theme: 'dark', density: 'comfortable' }
 
@@ -80,6 +81,7 @@ export default function StudentApp() {
 
   return (
     <div className="app">
+      <StudentTour />
       <StudentSidebar />
       <div className="main">
         <div className="content">

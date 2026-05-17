@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Section, makeSeedSections } from '../../TabEditor'
 import { api } from '../../api'
+import TabTutorial from '../../components/TabTutorial'
 
 export default function StudentSongEditor({ setPracticeSongs }) {
   const { id } = useParams()
@@ -98,6 +99,7 @@ export default function StudentSongEditor({ setPracticeSongs }) {
 
   return (
     <>
+      <TabTutorial />
       <div className="statusbar">
         <div className="left">
           <button className="btn btn--ghost btn--sm" onClick={() => navigate('/practice')}>← My Practice</button>

@@ -17,6 +17,7 @@ import TrendingPage from './pages/TrendingPage'
 import SongViewer from './pages/student/SongViewer'
 import { useAuth } from './AuthContext'
 import { api } from './api'
+import TeacherTour from './components/TeacherTour'
 
 const PAGE_PATHS = { dashboard: '/', batches: '/batches', students: '/students', lessons: '/lessons' }
 
@@ -431,6 +432,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <TeacherTour />
       <Sidebar active={activePage} onNavigate={(id) => navigate(PAGE_PATHS[id] || '/')} />
 
       <div className="main">
